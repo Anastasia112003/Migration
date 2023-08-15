@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      author: Nastya
+      id: DEV-1
+      changes:
+        - sqlFile:
+            path: scripts/init/001_create_schema_users.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: scripts/init/002_ddl_create_users_table.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: scripts/dml/003_dml_insert_users.sql
+            relativeToChangelogFile: true
