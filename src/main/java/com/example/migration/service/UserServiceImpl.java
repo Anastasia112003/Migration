@@ -2,7 +2,9 @@ package com.example.migration.service;
 
 import com.example.migration.model.User;
 import com.example.migration.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,13 +29,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("not found"));
+    }
+
+    @Override
     public List<User> readAll() {
         return userRepository.findAll();
     }
 
     @Override
     public Optional<User> read(Long id) {
-            return Optional.of(userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("not found")));
+        return Optional.of(userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("not found")));
     }
 
     @Override
@@ -58,5 +65,17 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
         return true;
+    }
+
+    @Transactional
+    @Override
+    public void transferMoney(Long id, int amount) {
+        User user = getById(id);
+        if (user.getMoney() > 0 || user.getMoney() > amount) {
+            int newMoney = user.getMoney() - amount;
+            user.setMoney(newMoney);
+            userRepository.save(user);
+            throw new RuntimeException("Problem executing transaction.");
+        }
     }
 }

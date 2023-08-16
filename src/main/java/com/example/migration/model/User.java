@@ -18,13 +18,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @EqualsAndHashCode.Include
-    @Column(name="id")
+    @Column(name = "id")
     private Long id;
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
-    @Column(name="money")
+    @Column(name = "money")
     private Integer money;
 
 }

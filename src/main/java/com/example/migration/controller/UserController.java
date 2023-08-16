@@ -2,18 +2,21 @@ package com.example.migration.controller;
 
 import com.example.migration.model.User;
 import com.example.migration.service.UserService;
+import com.example.migration.service.UserServiceTestTransaction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Optional;
+
 
 @RestController
 public class UserController {
     private final UserService userService;
+    private final UserServiceTestTransaction userServiceTestTransaction;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserServiceTestTransaction userServiceTestTransaction) {
         this.userService = userService;
+        this.userServiceTestTransaction = userServiceTestTransaction;
     }
 
     @PostMapping("/save")
@@ -23,11 +26,22 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity <Collection<User> >findAll() {
+    public ResponseEntity<Collection<User>> findAll() {
         Collection<User> users = userService.readAll();
-         return ResponseEntity.ok().body(users);
+        return ResponseEntity.ok().body(users);
     }
 
+    @PostMapping("/{id}/{amount}")
+    public void transfer(@PathVariable long id, @PathVariable int amount) {
+        userService.transferMoney(id, amount);
 
-
+    }
+//    @PostMapping("/{id}/{amount}")
+//    public void transactionTest(@PathVariable long id ,@PathVariable int amount){
+//        userServiceTestTransaction.call(id, amount);
+//
+//    }
 }
+
+
+
